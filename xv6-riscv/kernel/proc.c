@@ -425,6 +425,8 @@ kwait(uint64 addr)
 //  - swtch to start running that process.
 //  - eventually that process transfers control
 //    via swtch back to the scheduler.
+
+//*********************** I THINK THIS MAKES MORE SENSE TO INITIALIZE RUNTIME HERE*********
 void
 scheduler(void)
 {

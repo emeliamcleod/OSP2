@@ -78,6 +78,7 @@ struct trapframe {
 
 enum procstate { UNUSED, USED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
+//******** I THINK THE RUNTIME FIELD GOES HERE********************//////////////////
 // Per-process state
 struct proc {
   struct spinlock lock;
