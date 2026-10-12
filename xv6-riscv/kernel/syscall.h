@@ -22,3 +22,5 @@
 #define SYS_close  21
 #define SYS_sync   22
 #define SYS_getfilenum 23
+//NEW ENTRY
+#define SYS_getpinfo 24

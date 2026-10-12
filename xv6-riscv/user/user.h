@@ -27,6 +27,9 @@ char *sys_sbrk(int, int);
 int pause(int);
 int uptime(void);
 int sync(void);
+//ANOTHER NEW ENTRY - I have it returning an int at the moment. 
+//Not exactally sure what the integer represents yet. 
+int getpinfo (int);
 
 // ulib.c
 int stat(const char *, struct stat *);

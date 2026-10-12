@@ -644,6 +644,14 @@ getfilenum(int pid)
    return -1; 
 }
 
+//NEW ENTRY
+//the argument probably needs to be changed, this is just so it is here and we can worry less about where to add it and more just what it does lol
+int getpinfo(void)
+{
+  return 0;
+  //again less worried about what the return value should actually be at this moment in time. 
+}
+
 void
 setkilled(struct proc *p)
 {

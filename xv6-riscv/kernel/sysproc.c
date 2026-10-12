@@ -120,3 +120,9 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+uint64 
+sys_getpinfo(void)
+{
+  //AT THE MOMENT THIS DOES NOT DO ANYTHING, BUT IT DOES EXIST!
+}

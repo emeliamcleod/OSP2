@@ -88,6 +88,8 @@ pagetable_t     proc_pagetable(struct proc *);
 void            proc_freepagetable(pagetable_t, uint64);
 int             kkill(int);
 int             getfilenum(int);
+//NEW ENTRY HERE
+int             getpinfor(void);
 int             killed(struct proc*);
 void            setkilled(struct proc*);
 struct cpu*     mycpu(void);
