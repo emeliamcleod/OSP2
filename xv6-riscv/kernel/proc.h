@@ -102,4 +102,6 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
+   int runtime;               // Number of times the process has been on CPU 
+
 };
