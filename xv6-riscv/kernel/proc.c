@@ -114,6 +114,7 @@ allocproc(void)
 
   for (p = proc; p < &proc[NPROC]; p++) {
     acquire(&p->lock);
+    p->runtime = 0;  // Initialize runtime
     if (p->state == UNUSED) {
       goto found;
     } else {
