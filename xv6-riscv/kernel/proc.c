@@ -15,6 +15,7 @@ struct proc *initproc;
 int nextpid = 1;
 struct spinlock pid_lock;
 
+
 extern void forkret(void);
 static void freeproc(struct proc *p);
 
@@ -646,11 +647,20 @@ getfilenum(int pid)
 }
 
 //NEW ENTRY
-//the argument probably needs to be changed, this is just so it is here and we can worry less about where to add it and more just what it does lol
-int getpinfo(struct pstat *)
+//
+int getpinfo(struct pstat *pFromUser)
 {
+{
+  struct pstat pinfo; // local to kernel
+  for (int i=0; i < NPROC; ++i)
+   {
+     pinfo.inuse[i] = (proc[i].state != UNUSED);
+     // etc.. 
+   }
+ // now copy to user space from the pinfo structure
+  either_copyout(1, (uint64) pFromUser, &pinfo, sizeof(struct pstat));
   return 0;
-  //again less worried about what the return value should actually be at this moment in time. 
+ }
 }
 
 void
