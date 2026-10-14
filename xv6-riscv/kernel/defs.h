@@ -9,6 +9,7 @@ struct spinlock;
 struct sleeplock;
 struct stat;
 struct superblock;
+struct pstat;
 
 // bio.c
 void            binit(void);
@@ -89,7 +90,7 @@ void            proc_freepagetable(pagetable_t, uint64);
 int             kkill(int);
 int             getfilenum(int);
 //NEW ENTRY HERE - **PLEASE CHECK THIS!!**
-int             getpinfor(struct pstat *);
+int             getpinfo(struct pstat *);
 int             killed(struct proc*);
 void            setkilled(struct proc*);
 struct cpu*     mycpu(void);

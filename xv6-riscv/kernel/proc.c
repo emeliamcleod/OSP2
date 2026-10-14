@@ -5,6 +5,7 @@
 #include "spinlock.h"
 #include "proc.h"
 #include "defs.h"
+#include "pstat.h"
 
 struct cpu cpus[NCPU];
 
@@ -14,6 +15,7 @@ struct proc *initproc;
 
 int nextpid = 1;
 struct spinlock pid_lock;
+
 
 extern void forkret(void);
 static void freeproc(struct proc *p);
@@ -646,12 +648,26 @@ getfilenum(int pid)
 }
 
 //NEW ENTRY
-//the argument probably needs to be changed, this is just so it is here and we can worry less about where to add it and more just what it does lol
-int getpinfo(struct pstat *)
+//
+int 
+getpinfo(struct pstat *pFromUser)
 {
-  return 0;
-  //again less worried about what the return value should actually be at this moment in time. 
-}
+  struct pstat pinfo; // local to kernel
+  for (int i=0; i < NPROC; ++i)
+   {
+     pinfo.inuse[i] = (proc[i].state != UNUSED);
+     pinfo.pid[i]= (proc[i].pid); //NEW STUFF HERE
+     pinfo.runtime[i]=(proc[i].runtime); //NEW STUFF HERE
+   }
+ // now copy to user space from the pinfo structure
+  
+  if (either_copyout(1, (uint64) pFromUser, &pinfo, sizeof(struct pstat)) == 0)
+  {
+    return 0;
+  }
+  return -1;
+ }
+
 
 void
 setkilled(struct proc *p)
