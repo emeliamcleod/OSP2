@@ -5,6 +5,7 @@
 #include "spinlock.h"
 #include "proc.h"
 #include "defs.h"
+#include "pstat.h"
 
 struct cpu cpus[NCPU];
 
@@ -648,8 +649,8 @@ getfilenum(int pid)
 
 //NEW ENTRY
 //
-int getpinfo(struct pstat *pFromUser)
-{
+int 
+getpinfo(struct pstat *pFromUser)
 {
   struct pstat pinfo; // local to kernel
   for (int i=0; i < NPROC; ++i)
@@ -659,10 +660,14 @@ int getpinfo(struct pstat *pFromUser)
      pinfo.runtime[i]=(proc[i].runtime); //NEW STUFF HERE
    }
  // now copy to user space from the pinfo structure
-  either_copyout(1, (uint64) pFromUser, &pinfo, sizeof(struct pstat));
-  return 0;
+  
+  if (either_copyout(1, (uint64) pFromUser, &pinfo, sizeof(struct pstat)) == 0)
+  {
+    return 0;
+  }
+  return -1;
  }
-}
+
 
 void
 setkilled(struct proc *p)

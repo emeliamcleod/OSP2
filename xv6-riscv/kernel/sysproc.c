@@ -6,6 +6,7 @@
 #include "spinlock.h"
 #include "proc.h"
 #include "vm.h"
+#include "pstat.h"
 
 uint64
 sys_exit(void)
@@ -103,7 +104,6 @@ uint64
 sys_getfilenum(void)
 {
   int pid;
-
   argint(0, &pid);
   return getfilenum(pid);
 }
@@ -124,5 +124,7 @@ sys_uptime(void)
 uint64 
 sys_getpinfo(void)
 {
-  //AT THE MOMENT THIS DOES NOT DO ANYTHING, BUT IT DOES EXIST!
+  uint64 p; 
+  argaddr(0, &p); 
+  return getpinfo((struct pstat *)p);
 }
