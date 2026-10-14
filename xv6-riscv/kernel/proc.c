@@ -655,7 +655,8 @@ int getpinfo(struct pstat *pFromUser)
   for (int i=0; i < NPROC; ++i)
    {
      pinfo.inuse[i] = (proc[i].state != UNUSED);
-     // etc.. 
+     pinfo.pid[i]= (proc[i].pid); //NEW STUFF HERE
+     pinfo.runtime[i]=(proc[i].runtime); //NEW STUFF HERE
    }
  // now copy to user space from the pinfo structure
   either_copyout(1, (uint64) pFromUser, &pinfo, sizeof(struct pstat));
