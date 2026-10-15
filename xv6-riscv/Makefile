@@ -152,6 +152,7 @@ UPROGS=\
 	$U/_sync\
 	$U/_getfilenum\
 	$U/_getpinfo\
+	$U/_hardwork\
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)
