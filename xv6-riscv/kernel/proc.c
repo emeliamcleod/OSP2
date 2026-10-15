@@ -16,6 +16,7 @@ struct proc *initproc;
 int nextpid = 1;
 struct spinlock pid_lock;
 
+int passTotal = 0; //make passTotal a global variable
 
 extern void forkret(void);
 static void freeproc(struct proc *p);
@@ -116,6 +117,8 @@ allocproc(void)
   for (p = proc; p < &proc[NPROC]; p++) {
     acquire(&p->lock);
     p->runtime = 0;  // Initialize runtime
+    p->stride = 1; //initialize stride to 1
+    p->pass = 0; //initialize pass to 0
     if (p->state == UNUSED) {
       goto found;
     } else {
@@ -455,6 +458,8 @@ scheduler(void)
         // before jumping back to us.
         p->state = RUNNING;
         p->runtime++;  // Increment runtime: as we know it will be on the CPU
+        p->pass += p->stride; //add stride with pass
+        passTotal += p->stride; //increment passtotal with stride
         c->proc = p;
         swtch(&c->context, &p->context);
 
@@ -658,12 +663,15 @@ getpinfo(struct pstat *pFromUser)
    {
      pinfo.inuse[i] = (proc[i].state != UNUSED);
      pinfo.pid[i]= (proc[i].pid); //NEW STUFF HERE
-     pinfo.runtime[i]=(proc[i].runtime); //NEW STUFF HERE
+     pinfo.runtime[i]=(proc[i].runtime); //NEW STUFF HERE 
+     pinfo.pass[i]=(proc[i].pass);
+     pinfo.stride[i]=(proc[i].stride);
+     pinfo.passTotal = passTotal;
    }
  // now copy to user space from the pinfo structure
   
   if (either_copyout(1, (uint64) pFromUser, &pinfo, sizeof(struct pstat)) == 0)
-{
+ {
   return 0;
   }
   return -1;
