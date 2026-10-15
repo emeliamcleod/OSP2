@@ -654,7 +654,7 @@ getfilenum(int pid)
 }
 
 //NEW ENTRY
-//
+
 int 
 getpinfo(struct pstat *pFromUser)
 {
@@ -675,6 +675,14 @@ getpinfo(struct pstat *pFromUser)
   return 0;
   }
   return -1;
+}
+
+//NEW ENTRY
+
+int 
+setstride(int strideLength)
+{
+  return 0;
 }
 
 void

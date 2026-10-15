@@ -87,7 +87,7 @@ extern uint64 sys_wait(void);
 extern uint64 sys_pipe(void);
 extern uint64 sys_read(void);
 extern uint64 sys_kill(void);
-///////////////////////////////////////new entry
+//NEW ENTRY
 extern uint64 sys_getfilenum(void);
 extern uint64 sys_exec(void);
 extern uint64 sys_fstat(void);
@@ -107,6 +107,8 @@ extern uint64 sys_close(void);
 extern uint64 sys_sync(void);
 //NEW ENTRY
 extern uint64 sys_getpinfo(void);
+//NEW Entry
+extern uint64 sys_setstride(void);
 
 // An array mapping syscall numbers from syscall.h
 // to the function that handles the system call.
@@ -118,7 +120,7 @@ static uint64 (*syscalls[])(void) = {
   [SYS_pipe]    = sys_pipe,
   [SYS_read]    = sys_read,
   [SYS_kill]    = sys_kill,
-  /////////////////////// new entry
+  // NEW ENTRY
   [SYS_getfilenum] = sys_getfilenum,
   [SYS_exec]    = sys_exec,
   [SYS_fstat]   = sys_fstat,
@@ -137,7 +139,9 @@ static uint64 (*syscalls[])(void) = {
   [SYS_close]   = sys_close,
   [SYS_sync]    = sys_sync,
   //NEW ENTRY
-  [SYS_getpinfo] = sys_getpinfo
+  [SYS_getpinfo] = sys_getpinfo,
+  //NEW ENTRY
+  [SYS_setstride] = sys_setstride,
   // clang-format on
 };
 

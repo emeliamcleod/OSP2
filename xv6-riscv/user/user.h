@@ -32,6 +32,8 @@ int sync(void);
 //changing this to declare a struct and accept that as the argument
 struct pstat;
 int getpinfo(struct pstat *);
+//NEW ENTRY
+int setstride(int);
 
 // ulib.c
 int stat(const char *, struct stat *);
