@@ -128,3 +128,9 @@ sys_getpinfo(void)
   argaddr(0, &p); 
   return getpinfo((struct pstat *)p);
 }
+
+uint64
+sys_setstride(void)
+{
+ return 0;
+}

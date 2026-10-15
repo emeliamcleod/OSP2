@@ -24,3 +24,5 @@
 #define SYS_getfilenum 23
 //NEW ENTRY
 #define SYS_getpinfo 24
+//NEW ENTRY
+#define SYS_setstride 25
