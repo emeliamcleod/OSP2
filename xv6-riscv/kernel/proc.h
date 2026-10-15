@@ -103,4 +103,6 @@ struct proc {
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
   int runtime;               // Number of times the process has been on CPU
+  int pass;                   //for stride scheduling pt1
+  int stride;                 //for stride scheduling pt2
 };

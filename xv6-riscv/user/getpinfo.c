@@ -10,4 +10,5 @@ void main(){
 	if (ps.inuse[i])
         printf("pid: %d, runtime: %d\n", ps.pid[i], ps.runtime[i]);
     }
+    printf("passTotal: %d\n", ps.passTotal); //new: added so that it can print out passTotal for user space.
 }
