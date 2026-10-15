@@ -454,6 +454,7 @@ scheduler(void)
         // to release its lock and then reacquire it
         // before jumping back to us.
         p->state = RUNNING;
+        p->runtime++;  // Increment runtime: as we know it will be on the CPU
         c->proc = p;
         swtch(&c->context, &p->context);
 
@@ -662,12 +663,11 @@ getpinfo(struct pstat *pFromUser)
  // now copy to user space from the pinfo structure
   
   if (either_copyout(1, (uint64) pFromUser, &pinfo, sizeof(struct pstat)) == 0)
-  {
-    return 0;
+{
+  return 0;
   }
   return -1;
- }
-
+}
 
 void
 setkilled(struct proc *p)
