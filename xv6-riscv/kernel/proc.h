@@ -105,4 +105,5 @@ struct proc {
   int runtime;               // Number of times the process has been on CPU
   int pass;                   //for stride scheduling pt1
   int stride;                 //for stride scheduling pt2
+  int setstride;
 };
