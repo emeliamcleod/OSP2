@@ -132,5 +132,7 @@ sys_getpinfo(void)
 uint64
 sys_setstride(void)
 {
- return 0;
+  int strideLength;
+  argint(0,&strideLength);
+  return setstride(strideLength);
 }

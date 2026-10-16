@@ -453,11 +453,13 @@ scheduler(void)
     for (p = proc; p < &proc[NPROC]; p++) {
       acquire(&p->lock);
       if (p->state == RUNNABLE) {
+        //if(p->pass)
         // Switch to chosen process.  It is the process's job
         // to release its lock and then reacquire it
         // before jumping back to us.
         p->state = RUNNING;
         p->runtime++;  // Increment runtime: as we know it will be on the CPU
+        //p->pass
         p->pass += p->stride; //add stride with pass
         passTotal += p->stride; //increment passtotal with stride
         c->proc = p;
@@ -682,6 +684,7 @@ getpinfo(struct pstat *pFromUser)
 int 
 setstride(int strideLength)
 {
+  proc->stride = strideLength;
   return 0;
 }
 
