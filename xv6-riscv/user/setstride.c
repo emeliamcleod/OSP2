@@ -3,6 +3,9 @@
 #include "user/user.h"
 void main (){
     // need to define an integer here then 
-    setstride(14);
-    
+    int result = setstride(14);
+    printf("setstride: %d\n", result); //should return 0
+
+    int result2_perchance = setstride(0);
+    printf("setstride: %d\n", result2_perchance); //should return -1
 }

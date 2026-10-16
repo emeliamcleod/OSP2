@@ -684,7 +684,10 @@ getpinfo(struct pstat *pFromUser)
 int 
 setstride(int strideLength)
 {
-  proc->stride = strideLength;
+  if (strideLength < 1){
+    return -1; //return -1 if 
+  }
+  myproc()->stride = strideLength;
   return 0;
 }
 
