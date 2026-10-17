@@ -432,11 +432,11 @@ kwait(uint64 addr)
 //  - eventually that process transfers control
 //    via swtch back to the scheduler.
 
-//*********************** I THINK THIS MAKES MORE SENSE TO INITIALIZE RUNTIME HERE*********
 void
 scheduler(void)
 {
   struct proc *p;
+  struct proc *s;
   struct cpu *c = mycpu();
 
   c->proc = 0;
@@ -452,7 +452,7 @@ scheduler(void)
     int found = 0;
     for (p = proc; p < &proc[NPROC]; p++) {
       for (s = proc; s < &proc[NPROC]; s++){
-        if (p->pass < s->pass){
+        if (p->pass <= s->pass){
           acquire(&p->lock);
             if (p->state == RUNNABLE) {
               // Switch to chosen process.  It is the process's job
@@ -476,16 +476,13 @@ scheduler(void)
             }
         release(&p->lock);
         }
-    if (found == 0) {
+      }
+    }
+       if (found == 0) {
       // nothing to run; stop running on this core until an interrupt.
       asm volatile("wfi");
     }
   }
-
-        }
-      }
-        
-      
 }
 
 // Switch to scheduler.  Must hold only p->lock
