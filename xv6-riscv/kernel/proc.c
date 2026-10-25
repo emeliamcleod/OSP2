@@ -436,7 +436,6 @@ void
 scheduler(void)
 {
   struct proc *p;
-  struct proc *s;
   struct cpu *c = mycpu();
 
   c->proc = 0;
@@ -449,18 +448,25 @@ scheduler(void)
     intr_on();
     intr_off();
 
+    //NEW STUFF TO FIND PROCESS WITH SMALLEST PASS
+    struct proc *smallestPass = 0 ; //starts by setting the first process as the smallest
+    for (p = proc; p < &proc[NPROC]; p++) { //to loop through all the processes
+      if (p->state == RUNNABLE){
+        if(p->pass < smallestPass->pass)
+        {
+          smallestPass = p;
+        }
+      }
+    }
     int found = 0;
     for (p = proc; p < &proc[NPROC]; p++) {
-      for (s = proc; s < &proc[NPROC]; s++){
-        if (p->pass <= s->pass){
           acquire(&p->lock);
-            if (p->state == RUNNABLE) {
+            if (p->state == RUNNABLE && p == smallestPass) {
               // Switch to chosen process.  It is the process's job
               // to release its lock and then reacquire it
               // before jumping back to us.
               p->state = RUNNING;
               p->runtime++;  // Increment runtime: as we know it will be on the CPU
-              //p->pass
               p->pass += p->stride; //add stride with pass
               passTotal += p->stride; //increment passtotal with stride
               c->proc = p;
@@ -475,8 +481,6 @@ scheduler(void)
               found = 1;
             }
         release(&p->lock);
-        }
-      }
     }
        if (found == 0) {
       // nothing to run; stop running on this core until an interrupt.
