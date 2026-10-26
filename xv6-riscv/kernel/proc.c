@@ -436,7 +436,6 @@ void
 scheduler(void)
 {
   struct proc *p;
-  struct proc *s;
   struct cpu *c = mycpu();
   struct proc *smallest;
   int smallestPass;
@@ -458,8 +457,6 @@ scheduler(void)
 
     //part a: find the runnable process with the smallest pass
     for (p = proc; p < &proc[NPROC]; p++) {
-      for (s = proc; s < &proc[NPROC]; s++){
-        if (p->pass <= s->pass){
           acquire(&p->lock);
           if (p->state == RUNNABLE) {
             if (smallest == 0 || p->pass < smallest->pass){
@@ -499,15 +496,16 @@ scheduler(void)
           }
           release(&smallest->lock);
         }
-      }
-    }
-       if (found == 0) {
+      if (found == 0) {
       // nothing to run; stop running on this core until an interrupt.
       asm volatile("wfi");
+      }  
     }
   }
-}
-}
+       
+
+
+
 
 // Switch to scheduler.  Must hold only p->lock
 // and have changed proc->state. Saves and restores
