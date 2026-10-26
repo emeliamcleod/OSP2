@@ -437,6 +437,8 @@ scheduler(void)
 {
   struct proc *p;
   struct cpu *c = mycpu();
+  struct proc *smallest;
+  int smallestPass;
 
   c->proc = 0;
   for (;;) {
@@ -448,46 +450,62 @@ scheduler(void)
     intr_on();
     intr_off();
 
-    //NEW STUFF TO FIND PROCESS WITH SMALLEST PASS
-    struct proc *smallestPass = 0 ; //starts by setting the first process as the smallest
-    for (p = proc; p < &proc[NPROC]; p++) { //to loop through all the processes
-      if (p->state == RUNNABLE){
-        if(p->pass < smallestPass->pass)
-        {
-          smallestPass = p;
-        }
-      }
-    }
+    smallest = 0; //assuming that smallest is 0 and then updating
+    smallestPass = 0;
+
     int found = 0;
+
+    //part a: find the runnable process with the smallest pass
     for (p = proc; p < &proc[NPROC]; p++) {
           acquire(&p->lock);
-            if (p->state == RUNNABLE && p == smallestPass) {
-              // Switch to chosen process.  It is the process's job
-              // to release its lock and then reacquire it
-              // before jumping back to us.
-              p->state = RUNNING;
-              p->runtime++;  // Increment runtime: as we know it will be on the CPU
-              p->pass += p->stride; //add stride with pass
-              passTotal += p->stride; //increment passtotal with stride
-              c->proc = p;
-              swtch(&c->context, &p->context);
-
-              // Don't re-enable interrupts on release.
-              mycpu()->intena = 0;
-
-              // Process is done running for now.
-              // It should have changed its p->state before coming back.
-              c->proc = 0;
-              found = 1;
+          if (p->state == RUNNABLE) {
+            if (smallest == 0 || p->pass < smallest->pass){
+              smallest = p; //change the smallest if the current iteration process has a smaller pass
+              smallestPass = p->pass;
             }
-        release(&p->lock);
-    }
-       if (found == 0) {
+          }  
+          release(&p->lock);  
+        }
+
+        //part B: run the selected process
+        // Switch to chosen process.  It is the process's job
+        // to release its lock and then reacquire it
+        // before jumping back to us.
+        if (smallest !=0){
+          acquire(&smallest->lock);
+          
+          if (smallest->state == RUNNABLE && smallest->pass == smallestPass){
+
+            smallest->state = RUNNING;
+            smallest->runtime++;  // Increment runtime: as we know it will be on the CPU
+            
+            smallest->pass += smallest->stride; //add stride with pass
+            passTotal += smallest->stride; //increment passtotal with stride
+            //change all the p's to smallest so that the smallest process is taken into consideration.
+
+            c->proc = smallest;
+            swtch(&c->context, &smallest->context);
+
+            // Don't re-enable interrupts on release.
+            mycpu()->intena = 0;
+
+            // Process is done running for now.
+            // It should have changed its p->state before coming back.
+            c->proc = 0;
+            found = 1;
+          }
+          release(&smallest->lock);
+        }
+      if (found == 0) {
       // nothing to run; stop running on this core until an interrupt.
       asm volatile("wfi");
+      }  
     }
   }
-}
+       
+
+
+
 
 // Switch to scheduler.  Must hold only p->lock
 // and have changed proc->state. Saves and restores
