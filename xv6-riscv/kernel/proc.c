@@ -484,8 +484,8 @@ scheduler(void)
             passTotal += smallest->stride; //increment passtotal with stride
             //change all the p's to smallest so that the smallest process is taken into consideration.
 
-            c->proc = p;
-            swtch(&c->context, &p->context);
+            c->proc = smallest;
+            swtch(&c->context, &smallest->context);
 
             // Don't re-enable interrupts on release.
             mycpu()->intena = 0;
